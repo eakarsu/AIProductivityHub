@@ -1,0 +1,114 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "export": "Exportar",
+    "import": "Importar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "back": "Atr\u00e1s",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "reset": "Restablecer"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "bookmarks": "Marcadores",
+    "fileOrganizer": "Organizador de Archivos",
+    "passwordAuditor": "Auditor de Contrase\u00f1as",
+    "digitalDetox": "Desintoxicaci\u00f3n Digital",
+    "focusTimer": "Temporizador de Enfoque",
+    "profile": "Perfil",
+    "settings": "Configuraci\u00f3n",
+    "notifications": "Notificaciones",
+    "feedback": "Comentarios",
+    "admin": "Panel de Admin",
+    "contact": "Contacto",
+    "privacy": "Pol\u00edtica de Privacidad",
+    "terms": "T\u00e9rminos de Servicio",
+    "logout": "Cerrar Sesi\u00f3n"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "Bienvenido de nuevo, {{name}}! Aqu\u00ed est\u00e1 tu Hub de Productividad AI.",
+    "exportAll": "Exportar Todo",
+    "refreshInsights": "Actualizar An\u00e1lisis",
+    "quickActions": "Acciones R\u00e1pidas",
+    "aiInsights": "An\u00e1lisis AI",
+    "aiUnavailable": "Servicio AI No Disponible",
+    "checkApiKey": "Verifica tu clave API de OpenRouter en el archivo .env"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesi\u00f3n",
+    "signUp": "Crear Cuenta",
+    "email": "Correo",
+    "password": "Contrase\u00f1a",
+    "name": "Nombre",
+    "forgotPassword": "\u00bfOlvidaste tu contrase\u00f1a?",
+    "demoAccount": "Cuenta Demo",
+    "autoFill": "Auto-Rellenar Credenciales Demo",
+    "noAccount": "\u00bfNo tienes cuenta? Reg\u00edstrate",
+    "hasAccount": "\u00bfYa tienes cuenta? Inicia Sesi\u00f3n"
+  },
+  "bookmarks": {
+    "title": "Organizador de Marcadores",
+    "subtitle": "Auto-categoriza y organiza tus marcadores con AI",
+    "addBookmark": "A\u00f1adir Marcador",
+    "categorizeAll": "Categorizar Todo con AI"
+  },
+  "files": {
+    "title": "Organizador de Archivos",
+    "subtitle": "Sugerencias inteligentes de carpetas con AI",
+    "addFile": "A\u00f1adir Archivo",
+    "uploadFiles": "Subir Archivos",
+    "dropZone": "Arrastra y suelta archivos aqu\u00ed, o haz clic para buscar",
+    "maxSize": "M\u00e1ximo 10MB por archivo"
+  },
+  "passwords": {
+    "title": "Auditor de Contrase\u00f1as",
+    "subtitle": "Recomendaciones de seguridad para tus contrase\u00f1as",
+    "addPassword": "A\u00f1adir Contrase\u00f1a",
+    "auditAll": "Auditar Todo"
+  },
+  "detox": {
+    "title": "Coach de Desintoxicaci\u00f3n Digital",
+    "subtitle": "Gesti\u00f3n del tiempo de pantalla",
+    "addEntry": "A\u00f1adir Entrada",
+    "analyze": "Analizar Patrones"
+  },
+  "focus": {
+    "title": "Temporizador de Enfoque",
+    "subtitle": "Temporizador Pomodoro con bloqueo de distracciones",
+    "newSession": "Nueva Sesi\u00f3n",
+    "start": "Iniciar",
+    "pause": "Pausar",
+    "complete": "Completar"
+  },
+  "settings": {
+    "title": "Configuraci\u00f3n",
+    "subtitle": "Personaliza tu experiencia en AI Productivity Hub",
+    "appearance": "Apariencia",
+    "theme": "Tema",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "Sistema",
+    "notifications": "Notificaciones",
+    "features": "Funciones",
+    "focusDefaults": "Valores del Temporizador de Enfoque"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar Todo Le\u00eddo",
+    "noNotifications": "Sin notificaciones"
+  },
+  "profile": {
+    "title": "Perfil",
+    "editProfile": "Editar Perfil",
+    "changePassword": "Cambiar Contrase\u00f1a"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "export": "Export",
+    "import": "Import",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "bookmarks": "Bookmarks",
+    "fileOrganizer": "File Organizer",
+    "passwordAuditor": "Password Auditor",
+    "digitalDetox": "Digital Detox",
+    "focusTimer": "Focus Timer",
+    "profile": "Profile",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "feedback": "Feedback",
+    "admin": "Admin Panel",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}! Here's your AI Productivity Hub.",
+    "exportAll": "Export All",
+    "refreshInsights": "Refresh Insights",
+    "quickActions": "Quick Actions",
+    "aiInsights": "AI Insights",
+    "aiUnavailable": "AI Service Unavailable",
+    "checkApiKey": "Check your OpenRouter API key in the .env file"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "forgotPassword": "Forgot Password?",
+    "demoAccount": "Demo Account",
+    "autoFill": "Auto-Fill Demo Credentials",
+    "noAccount": "Don't have an account? Register",
+    "hasAccount": "Already have an account? Sign In"
+  },
+  "bookmarks": {
+    "title": "Bookmark Organizer",
+    "subtitle": "Auto-categorize and organize your bookmarks with AI",
+    "addBookmark": "Add Bookmark",
+    "categorizeAll": "AI Categorize All"
+  },
+  "files": {
+    "title": "File Organizer",
+    "subtitle": "Smart folder suggestions powered by AI",
+    "addFile": "Add File",
+    "uploadFiles": "Upload Files",
+    "dropZone": "Drag & drop files here, or click to browse",
+    "maxSize": "Max 10MB per file"
+  },
+  "passwords": {
+    "title": "Password Auditor",
+    "subtitle": "Security recommendations for your passwords",
+    "addPassword": "Add Password",
+    "auditAll": "Audit All"
+  },
+  "detox": {
+    "title": "Digital Detox Coach",
+    "subtitle": "Screen time management and insights",
+    "addEntry": "Add Entry",
+    "analyze": "Analyze Patterns"
+  },
+  "focus": {
+    "title": "Focus Timer",
+    "subtitle": "Pomodoro timer with distraction blocking",
+    "newSession": "New Session",
+    "start": "Start",
+    "pause": "Pause",
+    "complete": "Complete"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your AI Productivity Hub experience",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System",
+    "notifications": "Notifications",
+    "features": "Features",
+    "focusDefaults": "Focus Timer Defaults"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark All Read",
+    "noNotifications": "No notifications"
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password"
+  }
+}
