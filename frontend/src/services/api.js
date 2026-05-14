@@ -162,4 +162,32 @@ export const getAuditLogs = (params) => api.get('/admin/audit-logs', { params })
 export const getAdminFeedback = () => api.get('/admin/feedback');
 export const updateFeedbackStatus = (id, data) => api.put(`/admin/feedback/${id}`, data);
 
+// Habits
+export const getHabits = (params) => api.get('/habits', { params });
+export const getHabit = (id) => api.get(`/habits/${id}`);
+export const createHabit = (data) => api.post('/habits', data);
+export const updateHabit = (id, data) => api.put(`/habits/${id}`, data);
+export const deleteHabit = (id) => api.delete(`/habits/${id}`);
+export const logHabit = (id, data) => api.post(`/habits/${id}/log`, data);
+export const getHabitStreaks = () => api.get('/habits/streaks/summary');
+
+// Goals
+export const getGoals = (params) => api.get('/goals', { params });
+export const getGoal = (id) => api.get(`/goals/${id}`);
+export const createGoal = (data) => api.post('/goals', data);
+export const updateGoal = (id, data) => api.put(`/goals/${id}`, data);
+export const deleteGoal = (id) => api.delete(`/goals/${id}`);
+export const generateGoalPlan = (id) => api.post(`/goals/${id}/ai-plan`);
+
+// AI Advanced
+export const getCrossInsights = () => api.post('/ai/cross-insights');
+export const getWeeklyDigest = () => api.post('/ai/weekly-digest');
+export const getFocusAnalysis = () => api.post('/ai/focus-analysis');
+
+// Usage Stats
+export const getUsageStats = (params) => api.get('/usage/stats', { params });
+
+// Focus Sessions (extended)
+export const getFocusSessionsStats = () => api.get('/focus-timer/sessions/stats');
+
 export default api;

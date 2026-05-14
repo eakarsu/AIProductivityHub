@@ -25,4 +25,16 @@ const passwordResetLimiter = rateLimit({
   message: { error: 'Too many password reset attempts, please try again later.' }
 });
 
-module.exports = { apiLimiter, authLimiter, passwordResetLimiter };
+// AI rate limiter - 20 req/hour, keyed by user ID or IP
+const aiRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 20,
+  message: { error: 'AI rate limit exceeded. Maximum 20 AI calls per hour. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => {
+    return req.user ? `user_${req.user.id}` : req.ip;
+  }
+});
+
+module.exports = { apiLimiter, authLimiter, passwordResetLimiter, aiRateLimiter };

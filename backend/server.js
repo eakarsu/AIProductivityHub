@@ -65,6 +65,82 @@ const searchRoutes = require('./routes/search');
 const exportRoutes = require('./routes/export');
 const uploadRoutes = require('./routes/upload');
 const extensionRoutes = require('./routes/extension');
+const habitsRoutes = require('./routes/habits');
+const goalsRoutes = require('./routes/goals');
+const usageRoutes = require('./routes/usage');
+
+// Initialize new tables on startup
+const pool = require('./db');
+(async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS token_blacklist (
+        token TEXT PRIMARY KEY,
+        expires_at TIMESTAMPTZ NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS ai_results (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER,
+        endpoint VARCHAR(200),
+        input_data JSONB,
+        result JSONB,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS ai_usage (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER,
+        endpoint VARCHAR(200),
+        tokens_used INTEGER DEFAULT 0,
+        cost_estimate NUMERIC(10,6) DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS habits (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER,
+        name VARCHAR(255) NOT NULL,
+        frequency VARCHAR(50) DEFAULT 'daily',
+        target_count INTEGER DEFAULT 1,
+        description TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS habit_logs (
+        id SERIAL PRIMARY KEY,
+        habit_id INTEGER,
+        user_id INTEGER,
+        count INTEGER DEFAULT 1,
+        notes TEXT,
+        logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS goals (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER,
+        title VARCHAR(500) NOT NULL,
+        description TEXT,
+        target_date DATE,
+        progress_pct INTEGER DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'active',
+        ai_plan JSONB,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('All new tables initialized successfully');
+  } catch (err) {
+    console.error('Table initialization error:', err.message);
+  }
+})();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
@@ -82,6 +158,11 @@ app.use('/api/search', searchRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/extension', extensionRoutes);
+app.use('/api/habits', habitsRoutes);
+app.use('/api/goals', goalsRoutes);
+app.use('/api/usage', usageRoutes);
+// Apply pass 5 — additive backlog routes
+app.use('/api/backlog', require('./routes/backlog'));
 
 // Health Check Endpoint (enhanced)
 app.get('/api/health', async (req, res) => {
@@ -201,7 +282,28 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 3001;
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  
+// === Custom Feature Mounts (batch_06) ===
+app.use('/api/cf-agentic-goal-orchestration', require('./routes/customFeat01_AgenticGoalOrchestration'));
+app.use('/api/cf-distraction-detector', require('./routes/customFeat02_DistractionDetector'));
+app.use('/api/cf-digital-wellbeing-coach', require('./routes/customFeat03_DigitalWellbeingCoach'));
+app.use('/api/cf-weekly-autopilot', require('./routes/customFeat04_WeeklyAutopilot'));
+app.use('/api/cf-cross-tool-optimization', require('./routes/customFeat05_CrossToolOptimization'));
+
+
+// === Batch 06 Gaps & Frontend Mounts ===
+app.use('/api/gap-goals-without-goal', require('./routes/gapFeat_goals_without_goal'));
+app.use('/api/gap-habits-without-habit', require('./routes/gapFeat_habits_without_habit'));
+app.use('/api/gap-focus-without-focus', require('./routes/gapFeat_focus_without_focus'));
+app.use('/api/gap-usage-without-usage', require('./routes/gapFeat_usage_without_usage'));
+app.use('/api/gap-limited-calendar-integration-no-native-task-schedu', require('./routes/gapFeat_limited_calendar_integration_no_native_task_schedu'));
+app.use('/api/gap-limited-integration-with-communication-tools-email', require('./routes/gapFeat_limited_integration_with_communication_tools_email'));
+app.use('/api/gap-no-ai', require('./routes/gapFeat_no_ai'));
+app.use('/api/gap-limited-team-collaboration-features', require('./routes/gapFeat_limited_team_collaboration_features'));
+app.use('/api/gap-no-integration-with-fitness-health-activity-sleep', require('./routes/gapFeat_no_integration_with_fitness_health_activity_sleep'));
+app.use('/api/gap-webhook-scaffolding-exists-but-not-full-end', require('./routes/gapFeat_webhook_scaffolding_exists_but_not_full_end'));
+
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`API docs: http://localhost:${PORT}/api/docs`);
   });

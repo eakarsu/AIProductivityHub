@@ -234,4 +234,54 @@ router.get('/stats/summary', authMiddleware, async (req, res) => {
   }
 });
 
+// POST /api/focus-sessions - alias for focus timer (start/end/duration/task_id)
+router.post('/sessions', authMiddleware, async (req, res) => {
+  try {
+    const { session_name, duration_minutes, break_duration_minutes, target_pomodoros, notes, task_id } = req.body;
+    const result = await pool.query(
+      `INSERT INTO focus_sessions (user_id, session_name, duration_minutes, break_duration_minutes, target_pomodoros, notes)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [req.user.id, session_name || 'Focus Session', duration_minutes || 25, break_duration_minutes || 5, target_pomodoros || 4, notes]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Create session error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// GET /api/focus-timer/sessions/stats - aggregate total focus time by task/project
+router.get('/sessions/stats', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const [bySession, totals] = await Promise.all([
+      pool.query(
+        `SELECT session_name,
+          SUM(duration_minutes * completed_pomodoros) as total_focus_minutes,
+          SUM(completed_pomodoros) as total_pomodoros,
+          COUNT(*) as session_count,
+          AVG(productivity_rating) as avg_rating
+         FROM focus_sessions WHERE user_id = $1 AND status = 'completed'
+         GROUP BY session_name ORDER BY total_focus_minutes DESC`,
+        [userId]
+      ),
+      pool.query(
+        `SELECT SUM(duration_minutes * completed_pomodoros) as total_minutes,
+          SUM(completed_pomodoros) as total_pomodoros,
+          COUNT(*) as total_sessions
+         FROM focus_sessions WHERE user_id = $1 AND status = 'completed'`,
+        [userId]
+      )
+    ]);
+
+    res.json({
+      totals: totals.rows[0],
+      by_session: bySession.rows
+    });
+  } catch (error) {
+    console.error('Focus sessions stats error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;
