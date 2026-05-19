@@ -252,9 +252,37 @@ router.post('/change-password', authMiddleware, validatePasswordChange, async (r
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await pool.query('UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [hashedPassword, req.user.id]);
 
-    res.json({ message: 'Password changed successfully' });
+    // Blacklist current token
+    if (req.token) {
+      const decoded = jwt.decode(req.token);
+      const expiresAt = decoded?.exp ? new Date(decoded.exp * 1000) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await pool.query(
+        'INSERT INTO token_blacklist (token, expires_at) VALUES ($1, $2) ON CONFLICT (token) DO NOTHING',
+        [req.token, expiresAt]
+      ).catch(() => {});
+    }
+
+    res.json({ message: 'Password changed successfully. Please login again.' });
   } catch (error) {
     console.error('Change password error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Logout - blacklist current token in DB
+router.post('/logout', authMiddleware, async (req, res) => {
+  try {
+    if (req.token) {
+      const decoded = jwt.decode(req.token);
+      const expiresAt = decoded?.exp ? new Date(decoded.exp * 1000) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await pool.query(
+        'INSERT INTO token_blacklist (token, expires_at) VALUES ($1, $2) ON CONFLICT (token) DO NOTHING',
+        [req.token, expiresAt]
+      );
+    }
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });

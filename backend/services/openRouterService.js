@@ -3,6 +3,21 @@ require('dotenv').config({ path: '../.env' });
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
+// 3-strategy JSON parser
+function parseAIJson(text, type = 'object') {
+  if (!text) return null;
+  // Strategy 1: direct parse
+  try { return JSON.parse(text); } catch (_) {}
+  // Strategy 2: strip markdown code blocks
+  const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  try { return JSON.parse(cleaned); } catch (_) {}
+  // Strategy 3: regex extract
+  const pattern = type === 'array' ? /\[[\s\S]*\]/ : /\{[\s\S]*\}/;
+  const match = cleaned.match(pattern);
+  if (match) { try { return JSON.parse(match[0]); } catch (_) {} }
+  return null;
+}
+
 async function callOpenRouter(prompt, systemPrompt = '') {
   try {
     const response = await fetch(OPENROUTER_API_URL, {
@@ -14,7 +29,7 @@ async function callOpenRouter(prompt, systemPrompt = '') {
         'X-Title': 'AI Productivity Hub'
       },
       body: JSON.stringify({
-        model: process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5',
+        model: process.env.OPENROUTER_MODEL || 'anthropic/claude-3-5-sonnet-20241022',
         messages: [
           ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
           { role: 'user', content: prompt }
@@ -186,6 +201,7 @@ async function generateFocusTip(sessionInfo) {
 
 module.exports = {
   callOpenRouter,
+  parseAIJson,
   categorizeBookmark,
   suggestFileOrganization,
   auditPassword,

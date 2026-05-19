@@ -21,7 +21,32 @@ import Feedback from './pages/Feedback';
 import AdminPanel from './pages/AdminPanel';
 import Onboarding from './pages/Onboarding';
 import { getMe } from './services/api';
+import Habits from './pages/Habits';
+import Goals from './pages/Goals';
+import WeeklyDigest from './pages/WeeklyDigest';
+import UsageStats from './pages/UsageStats';
+import CrossInsights from './pages/CrossInsights';
+import GoalProgressPredict from './pages/GoalProgressPredict';
+import UsageAnomalyDetect from './pages/UsageAnomalyDetect';
+import FocusBoostRecommend from './pages/FocusBoostRecommend';
 
+// // === Batch 06 Gaps & Frontend Mounts ===
+import CFAgenticGoalOrchestrationPage from './pages/CFAgenticGoalOrchestrationPage';
+import CFDistractionDetectorPage from './pages/CFDistractionDetectorPage';
+import CFDigitalWellbeingCoachPage from './pages/CFDigitalWellbeingCoachPage';
+import CFWeeklyAutopilotPage from './pages/CFWeeklyAutopilotPage';
+import CFCrossToolOptimizationPage from './pages/CFCrossToolOptimizationPage';
+import GapGoalsWithoutGoalPage from './pages/GapGoalsWithoutGoalPage';
+import GapHabitsWithoutHabitPage from './pages/GapHabitsWithoutHabitPage';
+import GapFocusWithoutFocusPage from './pages/GapFocusWithoutFocusPage';
+import GapUsageWithoutUsagePage from './pages/GapUsageWithoutUsagePage';
+import GapLimitedCalendarIntegrationNoNativeTaskScheduPage from './pages/GapLimitedCalendarIntegrationNoNativeTaskScheduPage';
+import GapLimitedIntegrationWithCommunicationToolsEmailPage from './pages/GapLimitedIntegrationWithCommunicationToolsEmailPage';
+import GapNoAiPage from './pages/GapNoAiPage';
+import GapLimitedTeamCollaborationFeaturesPage from './pages/GapLimitedTeamCollaborationFeaturesPage';
+import GapNoIntegrationWithFitnessHealthActivitySleepPage from './pages/GapNoIntegrationWithFitnessHealthActivitySleepPage';
+import GapWebhookScaffoldingExistsButNotFullEndPage from './pages/GapWebhookScaffoldingExistsButNotFullEndPage';
+import CustomViewsPage from './pages/CustomViewsPage';
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -98,7 +123,33 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/habits" element={<Habits />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/weekly-digest" element={<WeeklyDigest />} />
+          <Route path="/usage-stats" element={<UsageStats />} />
+          <Route path="/cross-insights" element={<CrossInsights />} />
+          <Route path="/goal-progress-predict" element={<GoalProgressPredict />} />
+          <Route path="/usage-anomaly-detect" element={<UsageAnomalyDetect />} />
+          <Route path="/focus-boost-recommend" element={<FocusBoostRecommend />} />
           <Route path="*" element={<Navigate to="/" />} />
+        
+          {/* // === Batch 06 Gaps & Frontend Mounts === */}
+          <Route path="/cf-agentic-goal-orchestration" element={<CFAgenticGoalOrchestrationPage />} />
+          <Route path="/cf-distraction-detector" element={<CFDistractionDetectorPage />} />
+          <Route path="/cf-digital-wellbeing-coach" element={<CFDigitalWellbeingCoachPage />} />
+          <Route path="/cf-weekly-autopilot" element={<CFWeeklyAutopilotPage />} />
+          <Route path="/cf-cross-tool-optimization" element={<CFCrossToolOptimizationPage />} />
+          <Route path="/gap-goals-without-goal" element={<GapGoalsWithoutGoalPage />} />
+          <Route path="/gap-habits-without-habit" element={<GapHabitsWithoutHabitPage />} />
+          <Route path="/gap-focus-without-focus" element={<GapFocusWithoutFocusPage />} />
+          <Route path="/gap-usage-without-usage" element={<GapUsageWithoutUsagePage />} />
+          <Route path="/gap-limited-calendar-integration-no-native-task-schedu" element={<GapLimitedCalendarIntegrationNoNativeTaskScheduPage />} />
+          <Route path="/gap-limited-integration-with-communication-tools-email" element={<GapLimitedIntegrationWithCommunicationToolsEmailPage />} />
+          <Route path="/gap-no-ai" element={<GapNoAiPage />} />
+          <Route path="/gap-limited-team-collaboration-features" element={<GapLimitedTeamCollaborationFeaturesPage />} />
+          <Route path="/gap-no-integration-with-fitness-health-activity-sleep" element={<GapNoIntegrationWithFitnessHealthActivitySleepPage />} />
+          <Route path="/gap-webhook-scaffolding-exists-but-not-full-end" element={<GapWebhookScaffoldingExistsButNotFullEndPage />} />
+          <Route path="/custom-views" element={<CustomViewsPage />} />
         </Routes>
       </main>
       <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />

@@ -5,7 +5,7 @@ import {
   AlertCircle, Download, Search, Bell, User, Settings, MessageCircle,
   FileText, ShieldCheck, HelpCircle, Keyboard, Upload, Globe
 } from 'lucide-react';
-import { getDashboardInsights, exportAllData } from '../services/api';
+import { getDashboardInsights, exportAllData, getCrossInsights } from '../services/api';
 import AIResponseDisplay from '../components/AIResponseDisplay';
 import Modal from '../components/Modal';
 import Toast from '../components/Toast';
@@ -16,6 +16,8 @@ function Dashboard({ user }) {
   const [loading, setLoading] = useState(true);
   const [selectedCard, setSelectedCard] = useState(null);
   const [toast, setToast] = useState(null);
+  const [crossInsights, setCrossInsights] = useState(null);
+  const [crossLoading, setCrossLoading] = useState(false);
 
   useEffect(() => { fetchInsights(); }, []);
 
@@ -28,6 +30,15 @@ function Dashboard({ user }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGetCrossInsights = async () => {
+    setCrossLoading(true);
+    try {
+      const res = await getCrossInsights();
+      setCrossInsights(res.data.insights);
+    } catch (e) { console.error(e); }
+    setCrossLoading(false);
   };
 
   const handleExportAll = async () => {
@@ -180,6 +191,38 @@ function Dashboard({ user }) {
           </div>
         </div>
       )}
+
+      {/* Cross-Tool Insights Panel */}
+      <div style={{ marginTop: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Sparkles size={24} color="var(--primary)" /> Cross-Tool Insights
+          </h2>
+          <button className="btn btn-secondary" onClick={handleGetCrossInsights} disabled={crossLoading}>
+            <Sparkles size={16} /> {crossLoading ? 'Analyzing...' : 'Get Insights'}
+          </button>
+        </div>
+        {crossLoading && <div className="loading"><div className="spinner" /></div>}
+        {crossInsights && typeof crossInsights === 'object' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+            {crossInsights.key_observations?.slice(0, 3).map((obs, i) => (
+              <div key={i} className="card" style={{ borderLeft: '3px solid var(--primary)' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Observation {i + 1}</div>
+                <p style={{ margin: 0 }}>{obs}</p>
+              </div>
+            ))}
+            {crossInsights.weekly_goal && (
+              <div className="card" style={{ borderLeft: '3px solid var(--success)', gridColumn: 'span 2' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>This Week's Goal</div>
+                <p style={{ margin: 0, fontWeight: 500 }}>{crossInsights.weekly_goal}</p>
+              </div>
+            )}
+          </div>
+        )}
+        {crossInsights && !crossInsights.key_observations && (
+          <div className="card"><AIResponseDisplay response={{ content: String(crossInsights), success: true }} /></div>
+        )}
+      </div>
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
