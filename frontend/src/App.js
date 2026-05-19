@@ -46,6 +46,7 @@ import GapNoAiPage from './pages/GapNoAiPage';
 import GapLimitedTeamCollaborationFeaturesPage from './pages/GapLimitedTeamCollaborationFeaturesPage';
 import GapNoIntegrationWithFitnessHealthActivitySleepPage from './pages/GapNoIntegrationWithFitnessHealthActivitySleepPage';
 import GapWebhookScaffoldingExistsButNotFullEndPage from './pages/GapWebhookScaffoldingExistsButNotFullEndPage';
+import CustomViewsPage from './pages/CustomViewsPage';
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -148,6 +149,7 @@ function App() {
           <Route path="/gap-limited-team-collaboration-features" element={<GapLimitedTeamCollaborationFeaturesPage />} />
           <Route path="/gap-no-integration-with-fitness-health-activity-sleep" element={<GapNoIntegrationWithFitnessHealthActivitySleepPage />} />
           <Route path="/gap-webhook-scaffolding-exists-but-not-full-end" element={<GapWebhookScaffoldingExistsButNotFullEndPage />} />
+          <Route path="/custom-views" element={<CustomViewsPage />} />
         </Routes>
       </main>
       <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />

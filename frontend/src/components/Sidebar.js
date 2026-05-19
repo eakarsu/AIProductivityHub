@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Bookmark, FolderOpen, Shield, Smartphone, Timer,
   LogOut, Sparkles, User, Settings, Bell, MessageCircle, ShieldCheck,
-  Search, FileText, MessageSquare, Target, Flag, BookOpen, BarChart2, Layers, TrendingUp, Activity, Zap
+  Search, FileText, MessageSquare, Target, Flag, BookOpen, BarChart2, Layers, TrendingUp, Activity, Zap, Eye
 } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 
@@ -35,6 +35,7 @@ function Sidebar({ user, setUser, onToggleSearch }) {
     { path: '/focus-timer', icon: Timer, label: 'Focus Timer' },
     { path: '/habits', icon: Target, label: 'Habits', isNew: true },
     { path: '/goals', icon: Flag, label: 'Goals', isNew: true },
+    { path: '/custom-views', icon: Eye, label: 'Productivity Views', isNew: true },
   // === Batch 06 Gaps & Frontend Mounts ===
   { path: '/cf-agentic-goal-orchestration', label: 'Agentic goal orchestration', icon: '✨' },
   { path: '/cf-distraction-detector', label: 'Distraction detector', icon: '✨' },

@@ -164,6 +164,9 @@ app.use('/api/usage', usageRoutes);
 // Apply pass 5 — additive backlog routes
 app.use('/api/backlog', require('./routes/backlog'));
 
+// Mount /api/custom-views BEFORE any 404/error handler
+app.use('/api/custom-views', require('./routes/customViews'));
+
 // Health Check Endpoint (enhanced)
 app.get('/api/health', async (req, res) => {
   try {
