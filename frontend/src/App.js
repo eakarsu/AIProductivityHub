@@ -47,6 +47,11 @@ import GapLimitedTeamCollaborationFeaturesPage from './pages/GapLimitedTeamColla
 import GapNoIntegrationWithFitnessHealthActivitySleepPage from './pages/GapNoIntegrationWithFitnessHealthActivitySleepPage';
 import GapWebhookScaffoldingExistsButNotFullEndPage from './pages/GapWebhookScaffoldingExistsButNotFullEndPage';
 import CustomViewsPage from './pages/CustomViewsPage';
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -109,6 +114,10 @@ function App() {
       <Sidebar user={user} setUser={setUser} onToggleSearch={toggleSearch} />
       <main className="main-content" role="main">
         <Routes>
+        <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
           <Route path="/" element={<Dashboard user={user} />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/file-organizer" element={<FileOrganizer />} />
