@@ -10,7 +10,7 @@ function Toast({ message, type = 'success', onClose, duration = 3000 }) {
   }, [onClose, duration]);
 
   return (
-    <div className={`toast ${type}`}>
+    <div className={`toast ${type} toast-${type}`}>
       {type === 'success' ? (
         <CheckCircle size={20} color="var(--success)" />
       ) : (
@@ -19,6 +19,7 @@ function Toast({ message, type = 'success', onClose, duration = 3000 }) {
       <span>{message}</span>
       <button
         onClick={onClose}
+        aria-label="Close notification"
         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', marginLeft: '0.5rem' }}
       >
         <X size={16} color="var(--text-muted)" />

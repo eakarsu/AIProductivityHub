@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, Mail, ArrowLeft, Key } from 'lucide-react';
 import { forgotPassword, resetPassword } from '../services/api';
@@ -13,6 +13,14 @@ function ForgotPassword() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const resetToken = new URLSearchParams(window.location.search).get('token');
+    if (resetToken) {
+      setToken(resetToken);
+      setStep('token');
+    }
+  }, []);
 
   const handleForgot = async (e) => {
     e.preventDefault();
@@ -92,7 +100,7 @@ function ForgotPassword() {
             </div>
             <div className="form-group">
               <label className="form-label">New Password</label>
-              <input type="password" className="form-input" placeholder="Enter new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={6} />
+              <input type="password" className="form-input" placeholder="Enter new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={12} />
             </div>
             <div className="form-group">
               <label className="form-label">Confirm Password</label>

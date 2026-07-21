@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Sparkles, Mail, Lock, Zap, UserPlus, User } from 'lucide-react';
+import { Sparkles, Mail, Lock, User } from 'lucide-react';
 import { login, register } from '../services/api';
 
 function Login({ setUser }) {
@@ -12,12 +12,6 @@ function Login({ setUser }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleAutoFill = () => {
-    setEmail('demo@example.com');
-    setPassword('demo123');
-    setError('');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -26,7 +20,7 @@ function Login({ setUser }) {
     try {
       if (isRegister) {
         if (!name) { setError('Name is required'); setLoading(false); return; }
-        if (password.length < 6) { setError('Password must be at least 6 characters'); setLoading(false); return; }
+        if (password.length < 12) { setError('Password must be at least 12 characters'); setLoading(false); return; }
         const response = await register(email, password, name);
         localStorage.setItem('token', response.data.token);
         if (response.data.refreshToken) localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -83,18 +77,13 @@ function Login({ setUser }) {
                 <Link to="/forgot-password" style={{ color: 'var(--primary)', fontSize: '0.8rem', textDecoration: 'none' }}>Forgot Password?</Link>
               )}
             </label>
-            <input id="password" type="password" className="form-input" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required aria-required="true" minLength={isRegister ? 6 : undefined} />
+            <input id="password" type="password" className="form-input" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required aria-required="true" minLength={isRegister ? 12 : undefined} />
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }} disabled={loading}>
             {loading ? (isRegister ? 'Creating account...' : 'Signing in...') : (isRegister ? 'Create Account' : 'Sign In')}
           </button>
 
-          {!isRegister && (
-            <button type="button" className="btn auto-fill-btn" onClick={handleAutoFill}>
-              <Zap size={18} /> Auto-Fill Demo Credentials
-            </button>
-          )}
         </form>
 
         {/* Toggle Register / Login */}
@@ -104,14 +93,6 @@ function Login({ setUser }) {
             {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Register"}
           </button>
         </div>
-
-        {!isRegister && (
-          <div style={{ marginTop: '1rem', padding: '1rem', background: 'var(--dark)', borderRadius: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-            <strong style={{ color: 'var(--text)' }}>Demo Account:</strong><br />
-            Email: demo@example.com<br />
-            Password: demo123
-          </div>
-        )}
 
         {/* Footer Links */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem', fontSize: '0.75rem' }}>

@@ -190,4 +190,22 @@ export const getUsageStats = (params) => api.get('/usage/stats', { params });
 // Focus Sessions (extended)
 export const getFocusSessionsStats = () => api.get('/focus-timer/sessions/stats');
 
+// Tasks
+export const getTasks = (params) => api.get('/tasks', { params });
+export const getTask = (id) => api.get(`/tasks/${id}`);
+export const createTask = (data) => api.post('/tasks', data);
+export const updateTask = (id, data) => api.put(`/tasks/${id}`, data);
+export const transitionTask = (id, data) => api.post(`/tasks/${id}/transition`, data);
+
+// Provider integrations
+export const getGoogleCalendarEvents = (params) => api.get('/backlog/integrations/google-calendar/events', { params });
+export const getOutlookEvents = (params) => api.get('/backlog/integrations/outlook/events', { params });
+export const upsertCalendarEvent = (provider, data) => api.post(`/backlog/integrations/${provider}/events`, data);
+export const sendSlackNotification = (data) => api.post('/backlog/integrations/slack/notify', data);
+export const sendIntegrationEmail = (data) => api.post('/backlog/integrations/email/send', data);
+export const getGoogleFitSummary = (params) => api.get('/backlog/integrations/google-fit/summary', { params });
+export const getAppleHealthSummaries = () => api.get('/backlog/integrations/apple-health/summary');
+export const uploadAppleHealthSummary = (data) => api.post('/backlog/integrations/apple-health/summary', data);
+export const getIntegrationHistory = () => api.get('/backlog/integrations/history');
+
 export default api;

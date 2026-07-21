@@ -8,7 +8,7 @@ if (typeof ipKeyGenerator !== 'function') {
 // General API rate limiter
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  max: process.env.NODE_ENV === 'test' ? 10000 : 100,
   message: { error: 'Too many requests, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false
@@ -17,7 +17,7 @@ const apiLimiter = rateLimit({
 // Auth rate limiter (stricter)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: process.env.NODE_ENV === 'test' ? 1000 : 10,
   message: { error: 'Too many authentication attempts, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false
@@ -26,7 +26,7 @@ const authLimiter = rateLimit({
 // Password reset rate limiter
 const passwordResetLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
+  max: process.env.NODE_ENV === 'test' ? 1000 : 5,
   message: { error: 'Too many password reset attempts, please try again later.' }
 });
 

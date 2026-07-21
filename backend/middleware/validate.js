@@ -10,7 +10,7 @@ const handleValidation = (req, res, next) => {
 
 const validateRegister = [
   body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
-  body('password').isLength({ min: 6, max: 128 }).withMessage('Password must be 6-128 characters'),
+  body('password').isLength({ min: 12, max: 128 }).withMessage('Password must be 12-128 characters'),
   body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Name is required'),
   handleValidation
 ];
@@ -83,7 +83,7 @@ const validateProfileUpdate = [
 
 const validatePasswordChange = [
   body('currentPassword').notEmpty().withMessage('Current password is required'),
-  body('newPassword').isLength({ min: 6, max: 128 }).withMessage('New password must be 6-128 characters'),
+  body('newPassword').isLength({ min: 12, max: 128 }).withMessage('New password must be 12-128 characters'),
   handleValidation
 ];
 

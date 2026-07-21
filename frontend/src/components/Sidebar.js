@@ -3,7 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Bookmark, FolderOpen, Shield, Smartphone, Timer,
   LogOut, Sparkles, User, Settings, Bell, MessageCircle, ShieldCheck,
-  Search, FileText, MessageSquare, Target, Flag, BookOpen, BarChart2, Layers, TrendingUp, Activity, Zap, Eye
+  Search, FileText, MessageSquare, Target, Flag, BookOpen, BarChart2, Layers, TrendingUp, Activity, Zap, Eye,
+  CheckSquare, Plug
 } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 
@@ -35,23 +36,9 @@ function Sidebar({ user, setUser, onToggleSearch }) {
     { path: '/focus-timer', icon: Timer, label: 'Focus Timer' },
     { path: '/habits', icon: Target, label: 'Habits', isNew: true },
     { path: '/goals', icon: Flag, label: 'Goals', isNew: true },
+    { path: '/tasks', icon: CheckSquare, label: 'Tasks', isNew: true },
+    { path: '/integrations', icon: Plug, label: 'Integrations', isNew: true },
     { path: '/custom-views', icon: Eye, label: 'Productivity Views', isNew: true },
-  // === Batch 06 Gaps & Frontend Mounts ===
-  { path: '/cf-agentic-goal-orchestration', label: 'Agentic goal orchestration', icon: '✨' },
-  { path: '/cf-distraction-detector', label: 'Distraction detector', icon: '✨' },
-  { path: '/cf-digital-wellbeing-coach', label: 'Digital wellbeing coach', icon: '✨' },
-  { path: '/cf-weekly-autopilot', label: 'Weekly autopilot', icon: '✨' },
-  { path: '/cf-cross-tool-optimization', label: 'Cross-tool optimization', icon: '✨' },
-  { path: '/gap-goals-without-goal', label: 'Goals without `/goal', icon: '✨' },
-  { path: '/gap-habits-without-habit', label: 'Habits without `/habit', icon: '✨' },
-  { path: '/gap-focus-without-focus', label: 'Focus without `/focus', icon: '✨' },
-  { path: '/gap-usage-without-usage', label: 'Usage without `/usage', icon: '✨' },
-  { path: '/gap-limited-calendar-integration-no-native-task-schedu', label: 'Limited calendar integration (no native task scheduling sync)', icon: '✨' },
-  { path: '/gap-limited-integration-with-communication-tools-email', label: 'Limited integration with communication tools (email, Slack', icon: '✨' },
-  { path: '/gap-no-ai', label: 'No AI', icon: '✨' },
-  { path: '/gap-limited-team-collaboration-features', label: 'Limited team/collaboration features', icon: '✨' },
-  { path: '/gap-no-integration-with-fitness-health-activity-sleep', label: 'No integration with fitness/health (activity, sleep)', icon: '✨' },
-  { path: '/gap-webhook-scaffolding-exists-but-not-full-end', label: 'Webhook scaffolding exists but not full end', icon: '✨' }
 ];
 
   const accountItems = [

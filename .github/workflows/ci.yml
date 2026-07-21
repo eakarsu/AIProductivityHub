@@ -39,12 +39,22 @@ jobs:
         working-directory: backend
         run: npm ci
 
+      - name: Apply database schema and migrations
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d ai_productivity_hub_test -v ON_ERROR_STOP=1 -f backend/models/schema.sql
+          for migration in backend/migrations/*.sql; do
+            psql -h localhost -U postgres -d ai_productivity_hub_test -v ON_ERROR_STOP=1 -f "$migration"
+          done
+
       - name: Run backend tests
         working-directory: backend
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/ai_productivity_hub_test
-          JWT_SECRET: test-jwt-secret-key
+          JWT_SECRET: test-jwt-secret-key-at-least-32-characters
           NODE_ENV: test
+          EXPOSE_DEMO_TOKENS: "false"
         run: npm test
 
   frontend-test:

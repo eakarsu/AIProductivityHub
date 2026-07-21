@@ -1,8 +1,8 @@
-require('dotenv').config({ path: '../../.env' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
-const path = require('path');
 
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
@@ -14,6 +14,11 @@ const pool = new Pool({
 
 async function seedDatabase() {
   try {
+    const demoAdminPassword = process.env.DEMO_ADMIN_PASSWORD;
+    const demoUserPassword = process.env.DEMO_USER_PASSWORD;
+    if (!demoAdminPassword || demoAdminPassword.length < 12 || !demoUserPassword || demoUserPassword.length < 12) {
+      throw new Error('DEMO_ADMIN_PASSWORD and DEMO_USER_PASSWORD must each contain at least 12 characters');
+    }
     console.log('Starting database seeding...');
 
     // Read and execute schema
@@ -27,7 +32,7 @@ async function seedDatabase() {
     console.log('Existing data cleared');
 
     // Create demo user (admin)
-    const hashedPassword = await bcrypt.hash('demo123', 10);
+    const hashedPassword = await bcrypt.hash(demoAdminPassword, 10);
     const userResult = await pool.query(
       `INSERT INTO users (email, password, name, email_verified, is_admin, onboarding_completed, avatar_url, bio, phone, timezone, language)
        VALUES ($1, $2, $3, TRUE, TRUE, TRUE, $4, $5, $6, $7, $8) RETURNING id`,
@@ -37,7 +42,7 @@ async function seedDatabase() {
     console.log('Demo user created');
 
     // Create second user
-    const hashedPassword2 = await bcrypt.hash('test123', 10);
+    const hashedPassword2 = await bcrypt.hash(demoUserPassword, 10);
     const user2Result = await pool.query(
       `INSERT INTO users (email, password, name, email_verified, is_admin, onboarding_completed)
        VALUES ($1, $2, $3, TRUE, FALSE, FALSE) RETURNING id`,
@@ -342,10 +347,10 @@ async function seedDatabase() {
     console.log('\nDatabase seeding completed successfully!');
     console.log('\nDemo user credentials:');
     console.log('  Email: demo@example.com');
-    console.log('  Password: demo123');
+    console.log('  Password: configured through DEMO_ADMIN_PASSWORD');
     console.log('\nTest user credentials:');
     console.log('  Email: test@example.com');
-    console.log('  Password: test123');
+    console.log('  Password: configured through DEMO_USER_PASSWORD');
 
     await pool.end();
   } catch (error) {

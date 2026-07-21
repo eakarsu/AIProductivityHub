@@ -6,10 +6,14 @@ describe('Bookmarks CRUD', () => {
   let bookmarkId;
 
   beforeAll(async () => {
-    // Login with demo user
     const res = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'demo@example.com', password: 'demo123' });
+      .post('/api/auth/register')
+      .send({
+        email: `bookmarks-${Date.now()}@example.test`,
+        password: 'bookmarks-test-password-123',
+        name: 'Bookmarks Test User'
+      });
+    expect(res.statusCode).toBe(201);
     token = res.body.token;
   });
 

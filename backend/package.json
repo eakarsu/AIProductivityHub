@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed": "node seeds/seedAll.js",
-    "test": "jest --forceExit --detectOpenHandles --testPathPattern=tests"
+    "test": "jest --forceExit --detectOpenHandles --runInBand --testPathPatterns=tests"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

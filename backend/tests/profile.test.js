@@ -1,14 +1,21 @@
 const request = require('supertest');
 const app = require('../server');
 
+async function createToken(label) {
+  const response = await request(app).post('/api/auth/register').send({
+    email: `${label}-${Date.now()}-${Math.random().toString(16).slice(2)}@example.test`,
+    password: 'profile-test-password-123',
+    name: 'Profile Test User'
+  });
+  expect(response.statusCode).toBe(201);
+  return response.body.token;
+}
+
 describe('Profile & Settings', () => {
   let token;
 
   beforeAll(async () => {
-    const res = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'demo@example.com', password: 'demo123' });
-    token = res.body.token;
+    token = await createToken('profile');
   });
 
   it('GET /api/profile should return user profile with stats', async () => {
@@ -52,10 +59,7 @@ describe('Notifications', () => {
   let token;
 
   beforeAll(async () => {
-    const res = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'demo@example.com', password: 'demo123' });
-    token = res.body.token;
+    token = await createToken('notifications');
   });
 
   it('GET /api/notifications should return paginated notifications', async () => {
@@ -80,10 +84,7 @@ describe('Search', () => {
   let token;
 
   beforeAll(async () => {
-    const res = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'demo@example.com', password: 'demo123' });
-    token = res.body.token;
+    token = await createToken('search');
   });
 
   it('GET /api/search should return results across entities', async () => {
@@ -108,10 +109,7 @@ describe('Export', () => {
   let token;
 
   beforeAll(async () => {
-    const res = await request(app)
-      .post('/api/auth/login')
-      .send({ email: 'demo@example.com', password: 'demo123' });
-    token = res.body.token;
+    token = await createToken('export');
   });
 
   it('GET /api/export/all should return all user data', async () => {
