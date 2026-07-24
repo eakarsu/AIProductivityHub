@@ -41,6 +41,11 @@ FRONTEND_PORT="${FRONTEND_PORT:-3000}"
 BACKEND_HOST="${BACKEND_HOST:-127.0.0.1}"
 FRONTEND_HOST="${FRONTEND_HOST:-127.0.0.1}"
 
+if [[ "${ALLOW_SCHEMA_MIGRATION:-}" != "true" ]]; then
+  echo "ALLOW_SCHEMA_MIGRATION=true is required." >&2
+  exit 1
+fi
+
 if command -v pg_isready >/dev/null 2>&1; then
   if ! pg_isready -h "${DB_HOST:-localhost}" -p "${DB_PORT:-5432}" >/dev/null 2>&1; then
     echo "PostgreSQL is unavailable. Start it and run scripts/database-setup.sh if needed." >&2
@@ -56,7 +61,8 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-(cd "$BACKEND_DIR" && START_HTTP_SERVER=true PORT="$PORT" FRONTEND_URL="${FRONTEND_URL:-http://$FRONTEND_HOST:$FRONTEND_PORT}" npm start) &
+integration_owner_user_id="$(cd "$BACKEND_DIR" && node scripts/prepareRuntime.js | tail -n 1)"
+(cd "$BACKEND_DIR" && START_HTTP_SERVER=true PORT="$PORT" INTEGRATION_OWNER_USER_ID="$integration_owner_user_id" FRONTEND_URL="${FRONTEND_URL:-http://$FRONTEND_HOST:$FRONTEND_PORT}" npm start) &
 backend_pid=$!
 (cd "$FRONTEND_DIR" && HOST="$FRONTEND_HOST" BROWSER=none PORT="$FRONTEND_PORT" REACT_APP_API_URL="${REACT_APP_API_URL:-http://$BACKEND_HOST:$PORT/api}" npm start) &
 frontend_pid=$!

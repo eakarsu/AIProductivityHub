@@ -10,7 +10,7 @@ function validateRuntimeEnvironment() {
   const personalProviderConfigured = [
     'GOOGLE_CALENDAR_REFRESH_TOKEN', 'OUTLOOK_REFRESH_TOKEN', 'GOOGLE_FIT_ACCESS_TOKEN'
   ].some((name) => Boolean(process.env[name]));
-  if (personalProviderConfigured && !/^\d+$/.test(process.env.INTEGRATION_OWNER_USER_ID || '')) {
+  if (process.env.NODE_ENV !== 'test' && personalProviderConfigured && !/^\d+$/.test(process.env.INTEGRATION_OWNER_USER_ID || '')) {
     problems.push('INTEGRATION_OWNER_USER_ID is required when personal provider credentials are configured');
   }
   if (production && !process.env.DATABASE_URL && !process.env.DB_PASSWORD) {

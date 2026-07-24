@@ -1,8 +1,6 @@
 const fetch = require('node-fetch');
 require('dotenv').config({ path: '../.env' });
 
-const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-
 // 3-strategy JSON parser
 function parseAIJson(text, type = 'object') {
   if (!text) return null;
@@ -19,47 +17,34 @@ function parseAIJson(text, type = 'object') {
 }
 
 async function callOpenRouter(prompt, systemPrompt = '') {
-  try {
-    const response = await fetch(OPENROUTER_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        'HTTP-Referer': process.env.FRONTEND_URL || 'http://localhost:3000',
-        'X-Title': 'AI Productivity Hub'
-      },
-      body: JSON.stringify({
-        model: process.env.OPENROUTER_MODEL || 'anthropic/claude-3-5-sonnet-20241022',
-        messages: [
-          ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
-          { role: 'user', content: prompt }
-        ],
-        max_tokens: 10000,
-        temperature: 0.7
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error.message || 'OpenRouter API error');
-    }
-
-    return {
-      success: true,
-      content: data.choices?.[0]?.message?.content || '',
-      model: data.model,
-      usage: data.usage,
-      raw: data
-    };
-  } catch (error) {
-    console.error('OpenRouter API Error:', error);
-    return {
-      success: false,
-      error: error.message,
-      content: null
-    };
-  }
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  const model = process.env.OPENROUTER_MODEL;
+  const baseUrl = String(process.env.OPENROUTER_BASE_URL || '').replace(/\/$/, '');
+  if (!apiKey || !model || !baseUrl) throw new Error('OpenRouter runtime configuration is required');
+  const response = await fetch(`${baseUrl}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': process.env.FRONTEND_URL || 'http://localhost:3000',
+      'X-Title': 'AI Productivity Hub'
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
+        { role: 'user', content: prompt }
+      ],
+      max_tokens: 10000,
+      temperature: 0.7
+    })
+  });
+  if (!response.ok) throw new Error(`OpenRouter request failed with HTTP ${response.status}`);
+  const data = await response.json();
+  if (data.error) throw new Error(data.error.message || 'OpenRouter API error');
+  const content = String(data.choices?.[0]?.message?.content || '').trim();
+  if (!content) throw new Error('OpenRouter returned empty content');
+  return { success: true, content, model: data.model || model, usage: data.usage, raw: data };
 }
 
 // AI Functions for each feature
