@@ -38,6 +38,7 @@ import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
 import CodexOperationsFeature from './pages/CodexOperationsFeature';
 
 import TimelineView from './pages/TimelineView';
+import EngineeringVelocity from './pages/EngineeringVelocity';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -133,6 +134,7 @@ function App() {
           <Route path="/focus-boost-recommend" element={<FocusBoostRecommend />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/integrations" element={<Integrations />} />
+          <Route path="/engineering-velocity" element={<EngineeringVelocity />} />
         
           <Route path="/custom-views" element={<CustomViewsPage />} />
           <Route path="*" element={<Navigate to="/" />} />

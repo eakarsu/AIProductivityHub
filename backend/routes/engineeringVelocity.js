@@ -1,0 +1,15 @@
+const express = require('express');
+const pool = require('../db');
+const auth = require('../middleware/auth');
+const router = express.Router();
+const features = {
+  'engineering-productivity': { title: 'Engineering Productivity Command Center', description: 'Connect AI cost to cycle time, quality, review coverage, and delivered value.' },
+  'organizational-velocity': { title: 'Organizational Velocity Analytics', description: 'Measure cross-functional delivery speed, coordination cost, rework, and outcomes.' },
+};
+router.use(auth);
+router.get('/definitions',(_req,res)=>res.json({features}));
+router.get('/records',async(req,res)=>{try{const feature=String(req.query.feature||'engineering-productivity');if(!features[feature])return res.status(400).json({error:'Unknown feature'});const q=await pool.query('SELECT * FROM engineering_velocity_records WHERE feature_key=$1 AND (user_id IS NULL OR user_id=$2) ORDER BY period DESC,id LIMIT 100',[feature,req.user.id]);res.json({data:q.rows});}catch(e){res.status(500).json({error:'Unable to load velocity evidence'});}});
+router.get('/summary',async(req,res)=>{try{const q=await pool.query(`SELECT feature_key,COUNT(*)::int AS records,ROUND(AVG(cycle_time_hours),1) AS cycle_time_hours,ROUND(AVG(rework_pct),1) AS rework_pct,ROUND(SUM(value_delivered_usd)/NULLIF(SUM(ai_cost_usd),0),1) AS value_multiple FROM engineering_velocity_records WHERE user_id IS NULL OR user_id=$1 GROUP BY feature_key`,[req.user.id]);res.json({data:q.rows});}catch(e){res.status(500).json({error:'Unable to summarize velocity'});}});
+router.post('/records',async(req,res)=>{const b=req.body||{};if(!features[b.featureKey]||!b.teamName||!b.deliveryStream)return res.status(422).json({error:'featureKey, teamName, and deliveryStream are required'});try{const q=await pool.query(`INSERT INTO engineering_velocity_records(user_id,feature_key,team_name,delivery_stream,period,ai_assisted_work_pct,cycle_time_hours,rework_pct,escaped_defects,ai_cost_usd,value_delivered_usd,human_review_coverage_pct,status,evidence) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'baseline',$13) RETURNING *`,[req.user.id,b.featureKey,String(b.teamName).trim(),String(b.deliveryStream).trim(),b.period||'2026-W30',Number(b.aiAssistedWorkPct)||0,Number(b.cycleTimeHours)||0,Number(b.reworkPct)||0,Number(b.escapedDefects)||0,Number(b.aiCostUsd)||0,Number(b.valueDeliveredUsd)||0,Number(b.humanReviewCoveragePct)||0,JSON.stringify({source:'operator entry',reviewRequired:true})]);res.status(201).json({data:q.rows[0]});}catch(e){res.status(500).json({error:'Unable to save velocity record'});}});
+router.post('/records/:id/verify',async(req,res)=>{try{const q=await pool.query(`UPDATE engineering_velocity_records SET status='verified',human_review_coverage_pct=GREATEST(human_review_coverage_pct,95),updated_at=NOW() WHERE id=$1 AND (user_id IS NULL OR user_id=$2) RETURNING *`,[req.params.id,req.user.id]);if(!q.rows[0])return res.status(404).json({error:'Record not found'});res.json({data:q.rows[0]});}catch(e){res.status(500).json({error:'Unable to verify evidence'});}});
+module.exports=router;

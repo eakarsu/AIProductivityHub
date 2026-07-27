@@ -94,6 +94,7 @@ app.use('/api/usage', usageRoutes);
 app.use('/api/tasks', tasksRoutes);
 // Apply pass 5 — additive backlog routes
 app.use('/api/backlog', require('./routes/backlog'));
+app.use('/api/engineering-velocity', require('./routes/engineeringVelocity'));
 
 // Mount /api/custom-views BEFORE any 404/error handler
 app.use('/api/custom-views', require('./routes/customViews'));

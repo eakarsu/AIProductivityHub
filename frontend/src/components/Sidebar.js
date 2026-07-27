@@ -38,6 +38,7 @@ function Sidebar({ user, setUser, onToggleSearch }) {
     { path: '/goals', icon: Flag, label: 'Goals', isNew: true },
     { path: '/tasks', icon: CheckSquare, label: 'Tasks', isNew: true },
     { path: '/integrations', icon: Plug, label: 'Integrations', isNew: true },
+    { path: '/engineering-velocity', icon: Activity, label: 'Engineering Velocity', isNew: true },
     { path: '/custom-views', icon: Eye, label: 'Productivity Views', isNew: true },
 ];
 
