@@ -230,6 +230,14 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 
+
+// Advisory AI reports only; native execution and approval routes stay unchanged.
+const aiWorkspaceSupport = require("./aiWorkspaceAdapters.cjs");
+const aiWorkspaceDatabase = require("./db.js");
+app.use('/api/report-workspace', require("./aiWorkspace.cjs").createAIWorkspaceRouter({
+  pool: aiWorkspaceDatabase, authenticateToken: require("./middleware/auth.js"),
+  aiRateLimiter: aiWorkspaceSupport.createWorkspaceLimiter(), features: require("./aiWorkspaceFeatures.json"),
+}));
 if (process.env.NODE_ENV !== 'test' || process.env.START_HTTP_SERVER === 'true') {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

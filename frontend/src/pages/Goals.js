@@ -3,7 +3,7 @@ import { Flag, Plus, Trash2, Edit2, Sparkles, CheckCircle } from 'lucide-react';
 import Modal from '../components/Modal';
 import AIResponseDisplay from '../components/AIResponseDisplay';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function Goals() {
   const [goals, setGoals] = useState([]);
@@ -25,7 +25,7 @@ function Goals() {
     try {
       const res = await fetch(`${API_URL}/goals?page=1&limit=50`, { headers: headers() });
       const data = await res.json();
-      setGoals(data.data || data || []);
+      setGoals(Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : []);
     } catch (e) { console.error(e); }
     setLoading(false);
   };
@@ -192,39 +192,7 @@ function Goals() {
                 <h4 style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Sparkles size={18} /> AI Action Plan
                 </h4>
-                {typeof aiPlan === 'object' ? (
-                  <div>
-                    {aiPlan.milestones?.length > 0 && (
-                      <div style={{ marginBottom: '1rem' }}>
-                        <strong>Milestones:</strong>
-                        {aiPlan.milestones.map((m, i) => (
-                          <div key={i} style={{ padding: '0.5rem', background: 'var(--dark)', borderRadius: '0.375rem', marginTop: '0.5rem' }}>
-                            <strong>Week {m.week}:</strong> {m.milestone}
-                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Success: {m.success_criteria}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {aiPlan.daily_actions?.length > 0 && (
-                      <div style={{ marginBottom: '1rem' }}>
-                        <strong>Daily Actions:</strong>
-                        <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
-                          {aiPlan.daily_actions.map((a, i) => <li key={i} style={{ marginBottom: '0.25rem' }}>{a}</li>)}
-                        </ul>
-                      </div>
-                    )}
-                    {aiPlan.motivational_tip && (
-                      <div style={{ padding: '0.75rem', background: 'var(--dark)', borderRadius: '0.375rem', fontStyle: 'italic', color: 'var(--primary-light)' }}>
-                        {aiPlan.motivational_tip}
-                      </div>
-                    )}
-                    {aiPlan.estimated_completion_probability !== undefined && (
-                      <div style={{ marginTop: '0.75rem', fontSize: '0.9rem' }}>
-                        <strong>Estimated completion probability:</strong> {aiPlan.estimated_completion_probability}%
-                      </div>
-                    )}
-                  </div>
-                ) : <AIResponseDisplay response={{ content: String(aiPlan) }} title="AI Plan" />}
+                <AIResponseDisplay response={{ content: aiPlan }} title="AI Plan" />
               </div>
             )}
           </div>

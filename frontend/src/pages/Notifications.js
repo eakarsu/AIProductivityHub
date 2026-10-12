@@ -17,10 +17,10 @@ function Notifications() {
 
   const fetchNotifications = async () => {
     try {
-      const params = { page, limit: 10 };
+      const params = { page, limit: 20 };
       if (filter === 'unread') params.unread = 'true';
       const response = await getNotifications(params);
-      setNotifications(response.data.notifications);
+      setNotifications(Array.isArray(response.data?.notifications) ? response.data.notifications : []);
       setTotal(response.data.total);
       setUnreadCount(response.data.unreadCount);
       setTotalPages(response.data.totalPages);

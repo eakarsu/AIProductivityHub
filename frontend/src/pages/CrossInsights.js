@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Layers, Sparkles, TrendingUp, Target } from 'lucide-react';
+import AIReport from '../components/AIReport';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function CrossInsights() {
   const [insights, setInsights] = useState(null);
@@ -120,9 +121,7 @@ function CrossInsights() {
       )}
 
       {insights && typeof insights !== 'object' && (
-        <div className="card">
-          <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{String(insights)}</pre>
-        </div>
+        <AIReport response={insights} title="Cross-Tool Insights" />
       )}
     </div>
   );

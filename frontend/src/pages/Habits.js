@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Target, Plus, Trash2, CheckCircle, Flame, Edit2, BarChart2 } from 'lucide-react';
 import Modal from '../components/Modal';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function Habits() {
   const [habits, setHabits] = useState([]);
@@ -28,7 +28,7 @@ function Habits() {
       ]);
       const habitsData = await habitsRes.json();
       const streaksData = await streaksRes.json();
-      setHabits(habitsData.data || habitsData || []);
+      setHabits(Array.isArray(habitsData) ? habitsData : Array.isArray(habitsData?.data) ? habitsData.data : []);
       setStreaks(Array.isArray(streaksData) ? streaksData : []);
     } catch (e) { console.error(e); }
     setLoading(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart2, Zap, DollarSign, Activity } from 'lucide-react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function UsageStats() {
   const [data, setData] = useState(null);

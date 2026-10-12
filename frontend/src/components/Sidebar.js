@@ -1,3 +1,4 @@
+import AIReportLibrary from "./AIReportLibrary";
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
@@ -15,7 +16,7 @@ function Sidebar({ user, setUser, onToggleSearch }) {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3001/api'}/auth/logout`, {
+        await fetch(`${((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api'}/auth/logout`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -144,7 +145,7 @@ function Sidebar({ user, setUser, onToggleSearch }) {
           <span>Logout</span>
         </button>
       </div>
-    </aside>
+    <AIReportLibrary /></aside>
   );
 }
 

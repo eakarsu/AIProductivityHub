@@ -80,15 +80,18 @@ function Login({ setUser }) {
             <input id="password" type="password" className="form-input" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required aria-required="true" minLength={isRegister ? 12 : undefined} />
           </div>
 
-          <button
-            type="button"
-            onClick={() => { setEmail(process.env.REACT_APP_DEMO_EMAIL || ''); setPassword(process.env.REACT_APP_DEMO_PASSWORD || ''); }}
-            disabled={!process.env.REACT_APP_DEMO_EMAIL || !process.env.REACT_APP_DEMO_PASSWORD}
-            aria-label="Auto Fill Demo Credentials"
-            style={{ width: '100%', marginBottom: '12px', padding: '10px 14px', borderRadius: '8px', border: '1px solid currentColor', background: 'transparent', cursor: 'pointer' }}
-          >
-            Auto Fill Demo Credentials
-          </button>
+          {!isRegister && <>
+            <button
+              type="button"
+              onClick={() => { setEmail(process.env.REACT_APP_DEMO_EMAIL || ''); setPassword(process.env.REACT_APP_DEMO_PASSWORD || ''); setError(''); }}
+              disabled={!process.env.REACT_APP_DEMO_EMAIL || !process.env.REACT_APP_DEMO_PASSWORD || loading}
+              style={{ width: '100%', marginBottom: '12px', padding: '10px 14px', borderRadius: '8px', border: '1px solid currentColor', background: 'transparent', cursor: 'pointer' }}
+            >
+              Fill demo credentials
+            </button>
+            {(!process.env.REACT_APP_DEMO_EMAIL || !process.env.REACT_APP_DEMO_PASSWORD) &&
+              <p role="status" style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Demo credentials are not configured for this browser build.</p>}
+          </>}
           <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }} disabled={loading}>
             {loading ? (isRegister ? 'Creating account...' : 'Signing in...') : (isRegister ? 'Create Account' : 'Sign In')}
           </button>

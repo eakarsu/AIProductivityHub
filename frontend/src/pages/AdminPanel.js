@@ -29,18 +29,18 @@ function AdminPanel() {
         setStats(s.data);
       }
       if (activeTab === 'users') {
-        const u = await getAdminUsers({ page: userPage, limit: 10 });
-        setUsers(u.data.users);
+        const u = await getAdminUsers({ page: userPage, limit: 20 });
+        setUsers(Array.isArray(u.data?.users) ? u.data.users : []);
         setUserTotalPages(u.data.totalPages);
       }
       if (activeTab === 'audit') {
         const a = await getAuditLogs({ page: logPage, limit: 20 });
-        setAuditLogs(a.data.logs);
+        setAuditLogs(Array.isArray(a.data?.logs) ? a.data.logs : []);
         setLogTotalPages(a.data.totalPages);
       }
       if (activeTab === 'feedback') {
         const f = await getAdminFeedback();
-        setFeedback(f.data);
+        setFeedback(Array.isArray(f.data) ? f.data : []);
       }
     } catch (error) {
       console.error('Admin error:', error);

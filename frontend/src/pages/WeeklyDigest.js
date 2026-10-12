@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import AIReport from '../components/AIReport';
 import { BookOpen, Sparkles, TrendingUp, Award, AlertTriangle } from 'lucide-react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function WeeklyDigest() {
   const [digest, setDigest] = useState(null);
@@ -155,10 +156,7 @@ function WeeklyDigest() {
       )}
 
       {digest && typeof digest !== 'object' && (
-        <div className="card">
-          <h3>AI Analysis</h3>
-          <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{String(digest)}</pre>
-        </div>
+        <AIReport response={digest} title="Weekly Digest" />
       )}
     </div>
   );

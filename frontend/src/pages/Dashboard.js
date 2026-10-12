@@ -220,7 +220,7 @@ function Dashboard({ user }) {
           </div>
         )}
         {crossInsights && !crossInsights.key_observations && (
-          <div className="card"><AIResponseDisplay response={{ content: String(crossInsights), success: true }} /></div>
+          <div className="card"><AIResponseDisplay response={{ content: crossInsights, success: true }} /></div>
         )}
       </div>
 

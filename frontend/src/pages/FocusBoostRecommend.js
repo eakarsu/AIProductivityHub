@@ -1,10 +1,14 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
 import React, { useState } from 'react';
 import { Zap, Sparkles } from 'lucide-react';
 import AIResponseDisplay from '../components/AIResponseDisplay';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function FocusBoostRecommend() {
+  const fullAIExamples = useFullAIExamples();
+
   const [currentTask, setCurrentTask] = useState('');
   const [energy, setEnergy] = useState('');
   const [timeOfDay, setTimeOfDay] = useState('');
@@ -63,8 +67,8 @@ function FocusBoostRecommend() {
       <div className="card" style={{ padding: '1.5rem', marginTop: '1rem' }}>
         <form
           onSubmit={handleRun}
-          style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
-        >
+          style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }} data-full-ai-workspace="FocusBoostRecommend"
+        ><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
           <div style={{ flex: '1 1 300px' }}>
             <label
               style={{
@@ -88,7 +92,7 @@ function FocusBoostRecommend() {
                 border: '1px solid var(--border)',
                 background: 'var(--bg-card)',
                 color: 'var(--text)',
-              }}
+              }} data-full-ai-field={fullAIExamples.bind({ current: currentTask, change: (e) => setCurrentTask(e.target.value), label: "currentTask", manual: false, json: false, sample: '' }, "p1-2653", undefined)}
             />
           </div>
           <div style={{ width: 160 }}>
@@ -116,7 +120,7 @@ function FocusBoostRecommend() {
                 border: '1px solid var(--border)',
                 background: 'var(--bg-card)',
                 color: 'var(--text)',
-              }}
+              }} data-full-ai-field={fullAIExamples.bind({ current: energy, change: (e) => setEnergy(e.target.value), label: "energy", manual: false, json: false, sample: '' }, "p1-3474", undefined)}
             />
           </div>
           <div style={{ width: 200 }}>
@@ -140,7 +144,7 @@ function FocusBoostRecommend() {
                 border: '1px solid var(--border)',
                 background: 'var(--bg-card)',
                 color: 'var(--text)',
-              }}
+              }} data-full-ai-field={fullAIExamples.bind({ current: timeOfDay, change: (e) => setTimeOfDay(e.target.value), label: "timeOfDay", manual: false, json: false, sample: '' }, "p1-4316", undefined)}
             >
               <option value="">— select —</option>
               <option value="morning">Morning</option>

@@ -1,10 +1,14 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
 import React, { useState } from 'react';
 import { Activity, Sparkles } from 'lucide-react';
 import AIResponseDisplay from '../components/AIResponseDisplay';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function UsageAnomalyDetect() {
+  const fullAIExamples = useFullAIExamples();
+
   const [days, setDays] = useState(30);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -54,8 +58,8 @@ function UsageAnomalyDetect() {
       <div className="card" style={{ padding: '1.5rem', marginTop: '1rem' }}>
         <form
           onSubmit={handleRun}
-          style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
-        >
+          style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }} data-full-ai-workspace="UsageAnomalyDetect"
+        ><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
           <div style={{ width: 200 }}>
             <label
               style={{
@@ -80,7 +84,7 @@ function UsageAnomalyDetect() {
                 border: '1px solid var(--border)',
                 background: 'var(--bg-card)',
                 color: 'var(--text)',
-              }}
+              }} data-full-ai-field={fullAIExamples.bind({ current: days, change: (e) => setDays(e.target.value), label: "days", manual: false, json: false, sample: 30 }, "p1-2228", undefined)}
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={loading}>

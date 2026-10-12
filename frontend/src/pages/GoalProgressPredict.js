@@ -1,10 +1,14 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
 import React, { useState } from 'react';
 import { TrendingUp, Sparkles } from 'lucide-react';
 import AIResponseDisplay from '../components/AIResponseDisplay';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = ((process.env.REACT_APP_API_URL || 'http://localhost:3001').replace(/\/+$/, '').replace(/\/api$/, '')) + '/api';
 
 function GoalProgressPredict() {
+  const fullAIExamples = useFullAIExamples();
+
   const [goalId, setGoalId] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -55,8 +59,8 @@ function GoalProgressPredict() {
       <div className="card" style={{ padding: '1.5rem', marginTop: '1rem' }}>
         <form
           onSubmit={handleRun}
-          style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
-        >
+          style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }} data-full-ai-workspace="GoalProgressPredict"
+        ><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
           <div style={{ flex: '1 1 300px' }}>
             <label
               style={{
@@ -80,7 +84,7 @@ function GoalProgressPredict() {
                 border: '1px solid var(--border)',
                 background: 'var(--bg-card)',
                 color: 'var(--text)',
-              }}
+              }} data-full-ai-field={fullAIExamples.bind({ current: goalId, change: (e) => setGoalId(e.target.value), label: "goalId", manual: false, json: false, sample: '' }, "p1-2328", undefined)}
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={loading}>
