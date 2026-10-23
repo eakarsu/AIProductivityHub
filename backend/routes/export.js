@@ -111,4 +111,17 @@ router.get('/all', authMiddleware, async (req, res) => {
   }
 });
 
+// Export tasks (FP42C — main task list, CSV/JSON)
+router.get('/tasks', authMiddleware, async (req, res) => {
+  try {
+    const format = req.query.format || 'json';
+    const { exportRecords, filterRecords } = require('../services/featurePack');
+    const result = await pool.query('SELECT * FROM tasks WHERE user_id = $1 ORDER BY id DESC', [req.user.id]);
+    const out = exportRecords(filterRecords(result.rows, req.query), format);
+    res.setHeader('Content-Type', out.contentType);
+    res.setHeader('Content-Disposition', `attachment; filename="tasks.${format === 'csv' ? 'csv' : 'json'}"`);
+    return res.send(out.body);
+  } catch (error) { res.status(500).json({ error: 'Server error' }); }
+});
+
 module.exports = router;

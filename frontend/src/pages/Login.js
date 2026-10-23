@@ -12,29 +12,52 @@ function Login({ setUser }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const submitLogin = async (loginEmail, loginPassword) => {
+    setError('');
+    setLoading(true);
+    try {
+      const response = await login(loginEmail, loginPassword);
+      localStorage.setItem('token', response.data.token);
+      if (response.data.refreshToken) localStorage.setItem('refreshToken', response.data.refreshToken);
+      setUser(response.data.user);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    const demoEmail = process.env.REACT_APP_DEMO_EMAIL || '';
+    const demoPassword = process.env.REACT_APP_DEMO_PASSWORD || '';
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError('');
+    if (demoEmail && demoPassword) {
+      await submitLogin(demoEmail, demoPassword);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isRegister) {
+      await submitLogin(email, password);
+      return;
+    }
     setError('');
     setLoading(true);
 
     try {
-      if (isRegister) {
-        if (!name) { setError('Name is required'); setLoading(false); return; }
-        if (password.length < 12) { setError('Password must be at least 12 characters'); setLoading(false); return; }
-        const response = await register(email, password, name);
-        localStorage.setItem('token', response.data.token);
-        if (response.data.refreshToken) localStorage.setItem('refreshToken', response.data.refreshToken);
-        setUser(response.data.user);
-        navigate('/onboarding');
-      } else {
-        const response = await login(email, password);
-        localStorage.setItem('token', response.data.token);
-        if (response.data.refreshToken) localStorage.setItem('refreshToken', response.data.refreshToken);
-        setUser(response.data.user);
-        navigate('/');
-      }
+      if (!name) { setError('Name is required'); setLoading(false); return; }
+      if (password.length < 12) { setError('Password must be at least 12 characters'); setLoading(false); return; }
+      const response = await register(email, password, name);
+      localStorage.setItem('token', response.data.token);
+      if (response.data.refreshToken) localStorage.setItem('refreshToken', response.data.refreshToken);
+      setUser(response.data.user);
+      navigate('/onboarding');
     } catch (err) {
-      setError(err.response?.data?.error || (isRegister ? 'Registration failed' : 'Login failed'));
+      setError(err.response?.data?.error || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -83,7 +106,7 @@ function Login({ setUser }) {
           {!isRegister && <>
             <button
               type="button"
-              onClick={() => { setEmail(process.env.REACT_APP_DEMO_EMAIL || ''); setPassword(process.env.REACT_APP_DEMO_PASSWORD || ''); setError(''); }}
+              onClick={handleDemoLogin}
               disabled={!process.env.REACT_APP_DEMO_EMAIL || !process.env.REACT_APP_DEMO_PASSWORD || loading}
               style={{ width: '100%', marginBottom: '12px', padding: '10px 14px', borderRadius: '8px', border: '1px solid currentColor', background: 'transparent', cursor: 'pointer' }}
             >

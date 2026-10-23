@@ -92,6 +92,7 @@ app.use('/api/habits', habitsRoutes);
 app.use('/api/goals', goalsRoutes);
 app.use('/api/usage', usageRoutes);
 app.use('/api/tasks', tasksRoutes);
+app.use('/api/feature-pack', require('./routes/featurePack')(require('./middleware/auth'), { loadRecords: async (req) => { const r = await require('./db').query('SELECT * FROM tasks WHERE user_id = $1 ORDER BY id DESC', [req.user?.id]); return r.rows; } }));
 // Apply pass 5 — additive backlog routes
 app.use('/api/backlog', require('./routes/backlog'));
 app.use('/api/engineering-velocity', require('./routes/engineeringVelocity'));
